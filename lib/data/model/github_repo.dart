@@ -1,8 +1,5 @@
 import 'package:github_repo_list_flutter/data/model/favorite_repo.dart';
 
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:github_repo_list_flutter/data/repository/github_repository.dart';
-
 class GithubRepo {
   final int id;
   final String fullName;
@@ -45,7 +42,3 @@ class Owner {
     );
   }
 }
-
-final githubRepositoryProvider = Provider<GithubRepository>((ref) {
-  return GithubRepository();
-});

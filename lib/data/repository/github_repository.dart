@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:github_repo_list_flutter/data/model/github_repo.dart';
 import 'package:http/http.dart' as http;
 
@@ -49,3 +50,7 @@ class GithubRepository {
     }
   }
 }
+
+final githubRepositoryProvider = Provider<GithubRepository>((ref) {
+  return GithubRepository();
+});

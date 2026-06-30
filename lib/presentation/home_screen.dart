@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:github_repo_list_flutter/presentation/search/search_screen.dart';
+import 'package:github_repo_list_flutter/presentation/favorite/favorite_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -19,13 +20,7 @@ class _HomeScreenState extends State<HomeScreen> {
           index: _currentIndex,
           children: const [
             SearchScreen(),
-            // TODO: add  Star List Screen
-            Center(
-              child: Text(
-                'Star List Screen',
-                textAlign: TextAlign.center,
-              ),
-            ),
+            FavoriteScreen(),
           ],
         ),
       ),

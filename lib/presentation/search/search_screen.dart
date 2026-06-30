@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:github_repo_list_flutter/presentation/search/widgets/repo_list_item.dart';
 import 'package:github_repo_list_flutter/viewmodel/search_view_model.dart';
+import 'package:github_repo_list_flutter/viewmodel/favorite_view_model.dart';
 
 class SearchScreen extends ConsumerStatefulWidget {
   const SearchScreen({super.key});
@@ -37,6 +38,8 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
   @override
   Widget build(BuildContext context) {
     final searchState = ref.watch(searchProvider);
+    final favoritesState = ref.watch(favoriteProvider);
+    final favoriteRepoIds = favoritesState.value?.map((e) => e.id).toSet() ?? {};
 
     return Column(
       children: [
@@ -64,13 +67,13 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
           ),
         ),
         Expanded(
-          child: _buildBody(searchState),
+          child: _buildBody(searchState, favoriteRepoIds),
         ),
       ],
     );
   }
 
-  Widget _buildBody(SearchState state) {
+  Widget _buildBody(SearchState state, Set<int> favoriteRepoIds) {
     if (state.query.isEmpty) {
       return const Center(
         child: Text(
@@ -106,14 +109,16 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
         }
 
         final repo = state.repos[index];
+        final isStarred = favoriteRepoIds.contains(repo.id);
+
         return RepoListItem(
           repo: repo,
-          isStarred: false, // Will be updated later when favorite provider is built
+          isStarred: isStarred,
           onTap: () {
             // TODO: Navigate to detail
           },
           onStarTap: () {
-            // TODO: Toggle favorite
+            ref.read(favoriteProvider.notifier).toggleFavorite(repo);
           },
         );
       },

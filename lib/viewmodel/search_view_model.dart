@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:github_repo_list_flutter/data/model/github_repo.dart';
+import 'package:github_repo_list_flutter/data/repository/github_repository.dart';
 
 class SearchState {
   final List<GithubRepo> repos;
@@ -75,7 +76,10 @@ class SearchViewModel extends Notifier<SearchState> {
     try {
       final nextPage = state.page + 1;
       final repository = ref.read(githubRepositoryProvider);
-      final result = await repository.searchRepositories(query: state.query, page: nextPage);
+      final result = await repository.searchRepositories(
+        query: state.query,
+        page: nextPage,
+      );
 
       state = state.copyWith(
         repos: [...state.repos, ...result],
@@ -90,6 +94,7 @@ class SearchViewModel extends Notifier<SearchState> {
   }
 }
 
-final searchProvider = NotifierProvider.autoDispose<SearchViewModel, SearchState>(() {
-  return SearchViewModel();
-});
+final searchProvider =
+    NotifierProvider.autoDispose<SearchViewModel, SearchState>(() {
+      return SearchViewModel();
+    });
