@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:github_repo_list_flutter/presentation/search/search_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -17,13 +18,7 @@ class _HomeScreenState extends State<HomeScreen> {
         child: IndexedStack(
           index: _currentIndex,
           children: const [
-            // TODO: add Search List Screen
-            Center(
-              child: Text(
-                'Search Screen',
-                textAlign: TextAlign.center,
-              ),
-            ),
+            SearchScreen(),
             // TODO: add  Star List Screen
             Center(
               child: Text(
