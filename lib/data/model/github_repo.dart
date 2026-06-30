@@ -5,12 +5,22 @@ class GithubRepo {
   final String fullName;
   final Owner owner;
   final int? subscribersCount;
+  final String? description;
+  final int? stargazersCount;
+  final String? language;
+  final int? forksCount;
+  final String? htmlUrl;
 
   const GithubRepo({
     required this.id,
     required this.fullName,
     required this.owner,
     this.subscribersCount,
+    this.description,
+    this.stargazersCount,
+    this.language,
+    this.forksCount,
+    this.htmlUrl,
   });
 
   factory GithubRepo.fromJson(Map<String, dynamic> json) {
@@ -19,6 +29,11 @@ class GithubRepo {
       fullName: json['full_name'] as String,
       owner: Owner.fromJson(json['owner'] as Map<String, dynamic>),
       subscribersCount: json['subscribers_count'] as int?,
+      description: json['description'] as String?,
+      stargazersCount: json['stargazers_count'] as int?,
+      language: json['language'] as String?,
+      forksCount: json['forks_count'] as int?,
+      htmlUrl: json['html_url'] as String?,
     );
   }
 
