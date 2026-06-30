@@ -6,21 +6,26 @@ class RepoListItem extends StatelessWidget {
   final VoidCallback onTap;
   final VoidCallback onStarTap;
   final bool isStarred;
+  final String heroTag;
 
   const RepoListItem({
     super.key,
     required this.repo,
     required this.onTap,
     required this.onStarTap,
+    required this.heroTag,
     this.isStarred = false,
   });
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: CircleAvatar(
-        backgroundImage: NetworkImage(repo.owner.avatarUrl),
-        backgroundColor: Colors.transparent,
+      leading: Hero(
+        tag: heroTag,
+        child: CircleAvatar(
+          backgroundImage: NetworkImage(repo.owner.avatarUrl),
+          backgroundColor: Colors.transparent,
+        ),
       ),
       title: Text(repo.fullName),
       trailing: IconButton(

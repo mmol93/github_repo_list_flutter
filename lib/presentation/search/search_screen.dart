@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:github_repo_list_flutter/presentation/search/widgets/repo_list_item.dart';
 import 'package:github_repo_list_flutter/viewmodel/search_view_model.dart';
 import 'package:github_repo_list_flutter/viewmodel/favorite_view_model.dart';
+import 'package:github_repo_list_flutter/presentation/detail/detail_screen.dart';
+import 'package:github_repo_list_flutter/utils.dart';
 
 class SearchScreen extends ConsumerStatefulWidget {
   const SearchScreen({super.key});
@@ -78,7 +80,7 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
       return const Center(
         child: Text(
           'Search some repositories!',
-          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+          style: TextStyle(fontSize: 18, color: Colors.grey),
         ),
       );
     }
@@ -114,8 +116,15 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
         return RepoListItem(
           repo: repo,
           isStarred: isStarred,
+          heroTag: 'search_avatar_${repo.id}',
           onTap: () {
-            // TODO: Navigate to detail
+            slideHorizontalNavigateStateful(
+              context,
+              DetailScreen(
+                initialRepo: repo,
+                heroTag: 'search_avatar_${repo.id}',
+              ),
+            );
           },
           onStarTap: () {
             ref.read(favoriteProvider.notifier).toggleFavorite(repo);

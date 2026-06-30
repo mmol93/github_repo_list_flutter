@@ -5,20 +5,25 @@ class FavoriteListItem extends StatelessWidget {
   final FavoriteRepo repo;
   final VoidCallback onTap;
   final VoidCallback onRemoveTap;
+  final String heroTag;
 
   const FavoriteListItem({
     super.key,
     required this.repo,
     required this.onTap,
     required this.onRemoveTap,
+    required this.heroTag,
   });
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: CircleAvatar(
-        backgroundImage: NetworkImage(repo.avatarUrl),
-        backgroundColor: Colors.transparent,
+      leading: Hero(
+        tag: heroTag,
+        child: CircleAvatar(
+          backgroundImage: NetworkImage(repo.avatarUrl),
+          backgroundColor: Colors.transparent,
+        ),
       ),
       title: Text(repo.fullName),
       trailing: IconButton(
