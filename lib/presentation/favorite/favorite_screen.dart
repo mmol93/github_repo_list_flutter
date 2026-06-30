@@ -4,7 +4,6 @@ import 'package:github_repo_list_flutter/presentation/favorite/widgets/favorite_
 import 'package:github_repo_list_flutter/viewmodel/favorite_view_model.dart';
 import 'package:github_repo_list_flutter/presentation/detail/detail_screen.dart';
 import 'package:github_repo_list_flutter/utils.dart';
-import 'package:github_repo_list_flutter/data/model/github_repo.dart';
 
 class FavoriteScreen extends ConsumerWidget {
   const FavoriteScreen({super.key});
@@ -33,15 +32,12 @@ class FavoriteScreen extends ConsumerWidget {
                 repo: repo,
                 heroTag: 'favorite_avatar_${repo.id}',
                 onTap: () {
-                  final dummyRepo = GithubRepo(
-                    id: repo.id,
-                    fullName: repo.fullName,
-                    owner: Owner(id: 0, login: '', avatarUrl: repo.avatarUrl),
-                  );
                   slideHorizontalNavigateStateful(
                     context,
                     DetailScreen(
-                      initialRepo: dummyRepo,
+                      repoId: repo.id,
+                      fullName: repo.fullName,
+                      avatarUrl: repo.avatarUrl,
                       heroTag: 'favorite_avatar_${repo.id}',
                     ),
                   );

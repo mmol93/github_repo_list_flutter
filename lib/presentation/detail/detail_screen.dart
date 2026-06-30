@@ -1,30 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:github_repo_list_flutter/data/model/github_repo.dart';
 import 'package:github_repo_list_flutter/viewmodel/repo_detail_view_model.dart';
 import 'package:github_repo_list_flutter/viewmodel/favorite_view_model.dart';
+import 'package:github_repo_list_flutter/data/model/favorite_repo.dart';
 
 class DetailScreen extends ConsumerWidget {
-  final GithubRepo initialRepo;
+  final int repoId;
+  final String fullName;
+  final String avatarUrl;
   final String heroTag;
 
-  const DetailScreen({super.key, required this.initialRepo, required this.heroTag});
+  const DetailScreen({
+    super.key,
+    required this.repoId,
+    required this.fullName,
+    required this.avatarUrl,
+    required this.heroTag,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // Watch detail provider for full repo data (including subscribers_count)
-    final detailState = ref.watch(repoDetailProvider(initialRepo.fullName));
-    
-    // Watch favorites to determine star icon state
+    final detailState = ref.watch(repoDetailProvider(fullName));
     final favoritesState = ref.watch(favoriteProvider);
-    final isStarred = favoritesState.value?.any((e) => e.id == initialRepo.id) ?? false;
-
-    // Use fetched data if available, otherwise fallback to initial data
-    final displayRepo = detailState.value ?? initialRepo;
+    final isStarred = favoritesState.value?.any((e) => e.id == repoId) ?? false;
+    final displayRepo = detailState.value;
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(initialRepo.fullName),
+        title: Text(fullName),
         actions: [
           IconButton(
             icon: Icon(
@@ -32,7 +35,13 @@ class DetailScreen extends ConsumerWidget {
               color: isStarred ? Colors.amber : Colors.grey,
             ),
             onPressed: () {
-              ref.read(favoriteProvider.notifier).toggleFavorite(initialRepo);
+              ref.read(favoriteProvider.notifier).toggleFavorite(
+                    FavoriteRepo(
+                      id: repoId,
+                      fullName: fullName,
+                      avatarUrl: avatarUrl,
+                    ),
+                  );
             },
           ),
         ],
@@ -47,13 +56,13 @@ class DetailScreen extends ConsumerWidget {
               tag: heroTag,
               child: CircleAvatar(
                 radius: 60,
-                backgroundImage: NetworkImage(initialRepo.owner.avatarUrl),
+                backgroundImage: NetworkImage(avatarUrl),
                 backgroundColor: Colors.transparent,
               ),
             ),
             const SizedBox(height: 24),
             Text(
-              initialRepo.fullName,
+              fullName,
               style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               textAlign: TextAlign.center,
             ),
@@ -72,21 +81,21 @@ class DetailScreen extends ConsumerWidget {
                       'Subscribers', 
                       detailState.isLoading 
                           ? null 
-                          : '${displayRepo.subscribersCount ?? 0}',
+                          : '${displayRepo?.subscribersCount ?? 0}',
                       Icons.visibility,
                     ),
                     _buildStatItem(
                       'Stars', 
                       detailState.isLoading 
                           ? null 
-                          : '${displayRepo.stargazersCount ?? 0}',
+                          : '${displayRepo?.stargazersCount ?? 0}',
                       Icons.star,
                     ),
                     _buildStatItem(
                       'Forks', 
                       detailState.isLoading 
                           ? null 
-                          : '${displayRepo.forksCount ?? 0}',
+                          : '${displayRepo?.forksCount ?? 0}',
                       Icons.fork_right,
                     ),
                   ],
@@ -96,7 +105,7 @@ class DetailScreen extends ConsumerWidget {
             
             const SizedBox(height: 24),
             
-            if (displayRepo.description != null && displayRepo.description!.isNotEmpty) ...[
+            if (displayRepo?.description != null && displayRepo!.description!.isNotEmpty) ...[
               const Align(
                 alignment: Alignment.centerLeft,
                 child: Text(

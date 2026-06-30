@@ -121,13 +121,15 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
             slideHorizontalNavigateStateful(
               context,
               DetailScreen(
-                initialRepo: repo,
+                repoId: repo.id,
+                fullName: repo.fullName,
+                avatarUrl: repo.owner.avatarUrl,
                 heroTag: 'search_avatar_${repo.id}',
               ),
             );
           },
           onStarTap: () {
-            ref.read(favoriteProvider.notifier).toggleFavorite(repo);
+            ref.read(favoriteProvider.notifier).toggleFavorite(repo.toFavorite());
           },
         );
       },

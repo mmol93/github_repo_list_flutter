@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:github_repo_list_flutter/data/model/favorite_repo.dart';
-import 'package:github_repo_list_flutter/data/model/github_repo.dart';
 import 'package:github_repo_list_flutter/data/repository/favorite_repository.dart';
 
 class FavoriteViewModel extends AsyncNotifier<List<FavoriteRepo>> {
@@ -11,14 +10,14 @@ class FavoriteViewModel extends AsyncNotifier<List<FavoriteRepo>> {
     return repository.getFavorites();
   }
 
-  Future<void> toggleFavorite(GithubRepo repo) async {
+  Future<void> toggleFavorite(FavoriteRepo repo) async {
     final repository = ref.read(favoriteRepositoryProvider);
-    final isFav = repository.isFavorite(repo.id);
+    final isAlreadyFavoriteRepo = repository.isFavorite(repo.id);
 
-    if (isFav) {
+    if (isAlreadyFavoriteRepo) {
       await repository.removeFavorite(repo.id);
     } else {
-      await repository.addFavorite(repo.toFavorite());
+      await repository.addFavorite(repo);
     }
 
     // Refresh state
